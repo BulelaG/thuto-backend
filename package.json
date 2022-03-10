@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "express": "^4.17.3",
+    "mongoose": "^6.2.2"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.0",
+    "nodemon": "^2.0.15"
+  },
+  "name": "mongo-personal-blog-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+"devStart":"nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
