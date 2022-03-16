@@ -2,29 +2,38 @@ GET http://localhost:4000/tutors
 
 ###
 
+
+# get one by ID
+
 GET http://localhost:4000/tutors/621364861
 
-###
+###POST ONE
 
-POST http://localhost:4000/tutors
+POST http://localhost:4000/auth/login-tutor
 Content-Type: application/json
 
 {
-  "name":"Maze Person",
-  "registeredToPlatform": "Thuto "  
+  "username": "HopeB",
+  "password": "123"
+
 }
 
-###
+###DELETE BY ID
 
-DELETE http://localhost:4000/tutors/6213828511f85262499c865a
+DELETE http://localhost:4000/tutors/622b15b70d2daa97f3fcd57f
 
-###
 
-PATCH http://localhost:4000/tutors/6213711911f85262499c864f
+
+###UPDATE BY ID
+
+PATCH http://localhost:4000/tutors
 Content-Type: application/json
 
 {
-    "name":"Bronn Donald"
+  "fullname":"Lee Bernad",
+  "subject": "Mathematics ",
+  "password": "123"
+  
 }
 
 

@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const Students = require('../models/student')
+const Student = require('../models/student')
 
 
 // C R U D

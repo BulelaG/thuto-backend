@@ -1,91 +1,99 @@
 const express = require('express')
 const router = express.Router()
-const Tutors = require('../models/tutor')
-
+const Tutor = require('../models/tutor')
+const {
+  verifyToken,
+  verifyTokenAndAuthorization,
+  verifyTokenAndAdmin,
+} = require("./verifyToken");
 
 // C R U D
 
 
-// _____________Read__________________________________
 
-// Getting all
-router.get('/', async (req, res) => {
+
+//UPDATE
+router.put("/:id", verifyTokenAndAuthorization, async (req, res) => {
+  if (req.body.password) {
+    req.body.password = CryptoJS.AES.encrypt(
+      req.body.password,
+      process.env.PASS_SEC
+    ).toString();
+  }
+
   try {
-    const tutors = await Tutor.find()
-    res.json(tutors)
+    const updatedTutor = await Tutor.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set: req.body,
+      },
+      { new: true }
+    );
+    res.status(200).json(updatedTutor);
   } catch (err) {
-    res.status(500).json({ message: err.message })
+    res.status(500).json(err);
   }
-}) 
+});
 
-// Getting One
-router.get('/:id', getTutor, (req, res) => {
-  res.json(res.tutor)
-})
-// __________________________________________________________________________
-
-
-
-// __________Create____________________________________
-// Creating one
-router.post('/', async (req, res) => {
-  const tutor = new Tutor({
-    name: req.body.name,
-    subject: req.body.subject
-  })
+//DELETE
+router.delete("/:id", verifyTokenAndAuthorization, async (req, res) => {
   try {
-    const newTutor = await tutor.save()
-    res.status(201).json(newTutor)
+    await Tutor.findByIdAndDelete(req.params.id);
+    res.status(200).json("Tutor has been deleted...");
   } catch (err) {
-    res.status(400).json({ message: err.message })
+    res.status(500).json(err);
   }
-})
-//___________________________________________________________________________  
+});
 
-
-// ___Updating One______________________________________-
-router.patch('/:id', getTutor, async (req, res) => {
-  if (req.body.name != null) {
-    res.tutor.name = req.body.name
-  }
-  if (req.body.subject != null) {
-    res.tutor.subject = req.body.subject
-  }
+//GET TUTOR
+router.get("/find/:id", async (req, res) => {
   try {
-    const updatedTutor = await res.tutor.save()
-    res.json(updatedTutor)
+    const tutor = await Tutor.findById(req.params.id);
+    const { password, ...others } = tutor._doc;
+    res.status(200).json(others);
   } catch (err) {
-    res.status(400).json({ message: err.message })
+    res.status(500).json(err);
   }
-})
-// _______________________________________________________________________________
+});
 
-
-
-//_____ _________Deleting One______________________________
-
-router.delete('/:id', getTutor, async (req, res) => {
+//GET ALL TUTOR
+router.get("/", async (req, res) => {
+  const query = req.query.new;
   try {
-    await res.tutor.remove()
-    res.json({ message: 'Deleted Tutor' })
+    const tutors = query
+      ? await Tutor.find().sort({ _id: -1 }).limit(5)
+      : await Tutor.find();
+    res.status(200).json(tutors);
   } catch (err) {
-    res.status(500).json({ message: err.message })
+    res.status(500).json(err);
   }
-})
+});
 
-async function getTutor(req, res, next) {
-  let tutor
-  try {
-    tutor = await Tutor.findById(req.params.id)
-    if (tutor == null) {
-      return res.status(404).json({ message: 'Cannot find tutor' })
-    }
-  } catch (err) {
-    return res.status(500).json({ message: err.message })
-  }
+//GET USER STATS
 
-  res.tutor = tutor
-  next()
-}
+// router.get("/stats", async (req, res) => {
+//   const date = new Date();
+//   const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));
 
-module.exports = router 
+//   try {
+//     const data = await User.aggregate([
+//       { $match: { createdAt: { $gte: lastYear } } },
+//       {
+//         $project: {
+//           month: { $month: "$createdAt" },
+//         },
+//       },
+//       {
+//         $group: {
+//           _id: "$month",
+//           total: { $sum: 1 },
+//         },
+//       },
+//     ]);
+//     res.status(200).json(data)
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// });
+
+module.exports = router

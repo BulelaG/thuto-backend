@@ -5,13 +5,33 @@ fullname: {
     type: String,
     required: true
 },
-subject: {
+username: {
     type: String,
     required: true
 },
 subject: {
     type: String,
+    required: false
+},
+password: {
+    type: String,
     required: true
+},
+location: {
+    type: String,
+    required:false 
+},
+img: {
+    type: String,
+    required:false  
+},
+grades: {
+    type: String,
+    required:false  
+},
+document: {
+    type: String,
+    required:false  
 },
 // registeredToPlatform: {
 //     type: String,
