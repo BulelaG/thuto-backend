@@ -1,13 +1,13 @@
 const express = require('express')
 const router = express.Router()
-const Tutor = require('../models/tutor')
+const Student = require('../models/student')
 const CryptoJS = require("crypto-js");
 const jwt = require('jsonwebtoken')
 
 
 //REGISTER
-router.post("/register-tutor", async (req, res) => {
-    const newTutor = new Tutor({
+router.post("/register-student", async (req, res) => {
+    const newStudent = new Student({
       fullname: req.body.fullname,
       username: req.body.username,
       password: CryptoJS.AES.encrypt(
@@ -17,8 +17,8 @@ router.post("/register-tutor", async (req, res) => {
     });
   
     try {
-      const savedTutor = await newTutor.save();
-      res.status(201).json(savedTutor);
+      const savedStudent = await newStudent.save();
+      res.status(201).json(savedStudent);
     } catch (err) {
       res.status(500).json(err);
     }
@@ -26,20 +26,20 @@ router.post("/register-tutor", async (req, res) => {
   
   //LOGIN
   
-  router.post('/login-tutor', async (req, res) => {
+  router.post('/login-student', async (req, res) => {
     
       try{
         
-          const tutor = await Tutor.findOne(
+          const student = await Student.findOne(
               {
                   username: req.body.username
               }
           );
   
-          !tutor && res.status(401).json("Wrong User Name");
-          console.log(tutor)
+          !student && res.status(401).json("Wrong User Name");
+          console.log(student)
           const hashedPassword = CryptoJS.AES.decrypt(
-              tutor.password,
+              student.password,
               process.env.PASS_SEC
           );
           
@@ -54,13 +54,13 @@ router.post("/register-tutor", async (req, res) => {
   
           const accessToken = jwt.sign(
           {
-              id:tutor._id,
+              id:student._id,
           },
           process.env.JWT_SEC,
               {expiresIn:"3d"}
           );
     
-          const { password, ...others } = tutor._doc;  
+          const { password, ...others } = student._doc;  
           res.status(200).json({...others, accessToken});
   
       }catch(err){

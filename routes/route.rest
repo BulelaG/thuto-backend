@@ -5,22 +5,35 @@ GET http://localhost:4000/tutors
 
 # get one by ID
 
-GET http://localhost:4000/tutors/621364861
+GET http://localhost:4000/tutors/find/6231e5afd5e9401d2886a4d6
 
-###POST ONE
+
+
+###POST ONE ( Register user)
+POST http://localhost:4000/auth/register-tutor
+Content-Type: application/json
+
+{
+  "fullname": "Langa Manzi",
+  "username": "LangaM",
+  "password": "123"
+}
+
+### Login- tutor
+
 
 POST http://localhost:4000/auth/login-tutor
 Content-Type: application/json
 
 {
-  "username": "HopeB",
+  "username": "BenF",
   "password": "123"
 
 }
 
 ###DELETE BY ID
 
-DELETE http://localhost:4000/tutors/622b15b70d2daa97f3fcd57f
+DELETE http://localhost:4000/tutors/6232f029eb4ac1b49a6c2ebf
 
 
 
@@ -36,4 +49,57 @@ Content-Type: application/json
   
 }
 
+# --------------------------------------S T U D E N T S-----------------------------------------------------------------------#
+
+
+GET http://localhost:4000/tutors
+
+###
+
+
+# get one by ID
+
+GET http://localhost:4000/tutors/find/6231e5afd5e9401d2886a4d6
+
+
+
+###POST ONE
+POST http://localhost:4000/auth/register-student
+Content-Type: application/json
+
+{
+  "fullname": "Langa Manzi",
+  "username": "LangaM",
+  "password": "123"
+}
+
+### login-student
+
+
+POST http://localhost:4000/auth/login-tutor
+Content-Type: application/json
+
+{
+  "username": "BenF",
+  "password": "123"
+
+}
+
+###DELETE BY ID
+
+DELETE http://localhost:4000/students/6232f029eb4ac1b49a6c2ebf
+
+
+
+###UPDATE BY ID
+
+PATCH http://localhost:4000/students
+Content-Type: application/json
+
+{
+  "fullname":"Lee Bernad",
+  "subject": "Mathematics ",
+  "password": "123"
+  
+}
 

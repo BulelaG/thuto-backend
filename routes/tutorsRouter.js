@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const Tutor = require('../models/tutor')
+const CryptoJS = require("crypto-js");
+
 const {
   verifyToken,
   verifyTokenAndAuthorization,
@@ -45,7 +47,7 @@ router.delete("/:id", verifyTokenAndAuthorization, async (req, res) => {
   }
 });
 
-//GET TUTOR
+//GET a TUTOR
 router.get("/find/:id", async (req, res) => {
   try {
     const tutor = await Tutor.findById(req.params.id);
@@ -55,6 +57,19 @@ router.get("/find/:id", async (req, res) => {
     res.status(500).json(err);
   }
 });
+
+
+// PROFILE
+router.get("/profile/:id", verifyTokenAndAuthorization, async (req, res) => {
+  try {
+    const tutor = await Tutor.findById(req.tutor.id);
+    const { password, ...others } = tutor._doc;
+    res.status(200).json(others);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 
 //GET ALL TUTOR
 router.get("/", async (req, res) => {

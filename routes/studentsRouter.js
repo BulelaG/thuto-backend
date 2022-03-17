@@ -1,91 +1,114 @@
 const express = require('express')
 const router = express.Router()
 const Student = require('../models/student')
+const CryptoJS = require("crypto-js");
 
+const {
+  verifyToken2,
+  verifyTokenAndAuthorization2,
+  // verifyTokenAndAdmin,
+} = require("./verifyToken2");
 
 // C R U D
 
 
-// _____________Read__________________________________
 
-// Getting all
-router.get('/', async (req, res) => {
+
+//UPDATE STUDENT
+router.put("/:id", verifyTokenAndAuthorization2, async (req, res) => {
+  if (req.body.password) {
+    req.body.password = CryptoJS.AES.encrypt(
+      req.body.password,
+      process.env.PASS_SEC
+    ).toString();
+  }
+
   try {
-    const students = await Student.find()
-    res.json(students)
+    const updatedStudent = await Student.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set: req.body,
+      },
+      { new: true }
+    );
+    res.status(200).json(updatedStudent);
   } catch (err) {
-    res.status(500).json({ message: err.message })
+    res.status(500).json(err);
   }
-}) 
+});
 
-// Getting One
-router.get('/:id', getStudent, (req, res) => {
-  res.json(res.student)
-})
-// __________________________________________________________________________
-
-
-
-// __________Create____________________________________
-// Creating one
-router.post('/', async (req, res) => {
-  const student = new Student({
-    name: req.body.name,
-    subject: req.body.subject
-  })
+//DELETE A STUDENT
+router.delete("/:id", verifyTokenAndAuthorization2, async (req, res) => {
   try {
-    const newStudent = await student.save()
-    res.status(201).json(newStudent)
+    await Student.findByIdAndDelete(req.params.id);
+    res.status(200).json("Student has been deleted...");
   } catch (err) {
-    res.status(400).json({ message: err.message })
+    res.status(500).json(err);
   }
-})
-//___________________________________________________________________________  
+});
 
-
-// ___Updating One______________________________________-
-router.patch('/:id', getStudent, async (req, res) => {
-  if (req.body.name != null) {
-    res.student.name = req.body.name
-  }
-  if (req.body.subject != null) {
-    res.tutor.subject = req.body.subject
-  }
+//GET A STUDENT
+router.get("/find/:id", async (req, res) => {
   try {
-    const updatedStudent = await res.student.save()
-    res.json(updatedStudent)
+    const student = await Student.findById(req.params.id);
+    const { password, ...others } = student._doc;
+    res.status(200).json(others);
   } catch (err) {
-    res.status(400).json({ message: err.message })
+    res.status(500).json(err);
   }
-})
-// _______________________________________________________________________________
+});
 
 
-
-//_____ _________Deleting One______________________________
-
-router.delete('/:id', getStudent, async (req, res) => {
+// STUDENT PROFILE
+router.get("/profile/:id", verifyTokenAndAuthorization2, async (req, res) => {
   try {
-    await res.student.remove()
-    res.json({ message: 'Deleted Student' })
+    const student = await Student.findById(req.student.id);
+    const { password, ...others } = student._doc;
+    res.status(200).json(others);
   } catch (err) {
-    res.status(500).json({ message: err.message })
+    res.status(500).json(err);
   }
-})
+});
 
-async function getStudent(req, res, next) {
-  let student
+
+//GET ALL STUDENTS
+router.get("/", async (req, res) => {
+  const query = req.query.new;
   try {
-    student = await Student.findById(req.params.id)
-    if (student == null) {
-      return res.status(404).json({ message: 'Cannot find student' })
-    }
+    const students = query
+      ? await Student.find().sort({ _id: -1 }).limit(5)
+      : await Student.find();
+    res.status(200).json(students);
   } catch (err) {
-    return res.status(500).json({ message: err.message })
+    res.status(500).json(err);
   }
+});
 
-  res.student = student
-  next()
-}
+//GET STUDENTS STATS
 
-module.exports = router 
+// router.get("/stats", async (req, res) => {
+//   const date = new Date();
+//   const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));
+
+//   try {
+//     const data = await User.aggregate([
+//       { $match: { createdAt: { $gte: lastYear } } },
+//       {
+//         $project: {
+//           month: { $month: "$createdAt" },
+//         },
+//       },
+//       {
+//         $group: {
+//           _id: "$month",
+//           total: { $sum: 1 },
+//         },
+//       },
+//     ]);
+//     res.status(200).json(data)
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// });
+
+module.exports = router

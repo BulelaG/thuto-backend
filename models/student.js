@@ -5,9 +5,13 @@ fullname: {
     type: String,
     required: true
 },
-email: {
+username: {
     type: String,
     required: true
+},
+email: {
+    type: String,
+    required: false
 },
 password: {
     type: String,
@@ -15,15 +19,15 @@ password: {
 },
 img: {
     type: String,
-    required: true
+    required: false
 },
 contact: {
     type: String,
-    required: true
+    required: false
 },
 subject: {
     type: String,
-    required: true
+    required: false
 },
 grade: {
     type: String,

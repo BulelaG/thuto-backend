@@ -1,14 +1,14 @@
 const jwt = require("jsonwebtoken");
 
-const verifyToken = (req, res, next) => {
+const verifyToken2 = (req, res, next) => {
   const authHeader = req.headers.token;
   if (authHeader) {
     const token = authHeader.split(" ")[1];
-    jwt.verify(token, process.env.JWT_SEC, (err, tutor) => {
+    jwt.verify(token, process.env.JWT_SEC, (err, student) => {
       if (err) res.status(403).json("Token is not valid!");
-      req.tutor = tutor;
+      req.student = student;
       console.log("Hello World!");
-      console.log(req.tutor.id);
+      console.log(req.student.id);
       next();
     });
   } else {
@@ -16,9 +16,9 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-const verifyTokenAndAuthorization = (req, res, next) => {
-  verifyToken(req, res, () => {
-    if (req.tutor.id === req.params.id ) {
+const verifyTokenAndAuthorization2 = (req, res, next) => {
+  verifyToken2(req, res, () => {
+    if (req.student.id === req.params.id ) {
       next();
     } else {
       res.status(403).json("You are not alowed to do that!");
@@ -37,7 +37,7 @@ const verifyTokenAndAuthorization = (req, res, next) => {
 // };
 
 module.exports = {
-  verifyToken,
-  verifyTokenAndAuthorization
+  verifyToken2,
+  verifyTokenAndAuthorization2
 //   verifyTokenAndAdmin,
 };
