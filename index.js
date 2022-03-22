@@ -1,5 +1,13 @@
 require('dotenv').config()
 
+const cors=require("cors");
+const corsOptions ={
+   origin:'*', 
+   credentials:true,            //access-control-allow-credentials:true
+   optionSuccessStatus:200,
+}
+
+
 const tutorsRouter = require('./routes/tutorsRouter')
 const studentsRouter = require('./routes/studentsRouter')
 const authRoute = require("./routes/auth");
@@ -18,7 +26,7 @@ db.on('error', (error) => console.error(error))
 db.once('open', () => console.log('Connected to Database'))
 
 
-
+app.use(cors(corsOptions)) // Use this after the variable declaration
 app.use(express.json()) 
 app.use('/auth', authRoute)
 app.use('/auth2', authRoute2)
