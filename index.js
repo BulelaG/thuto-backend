@@ -1,5 +1,5 @@
-let PORT = process.env.PORT || 5000;
-require('dotenv').config({path: '.env'})
+
+require('dotenv').config()
 
 const cors=require("cors");
 const corsOptions ={
@@ -35,7 +35,8 @@ app.use('/auth2', authRoute2)
 app.use('/tutors', tutorsRouter)
 app.use('/students', studentsRouter)
 
+let port = process.env.PORT || 5000;
 
 
 
-app.listen(PORT , ()=> console.log('Server Started')) 
+app.listen(port , ()=> console.log('Server Started')) 
