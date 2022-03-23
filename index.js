@@ -1,4 +1,5 @@
-require('dotenv').config()
+let PORT = process.env.PORT || 5000;
+require('dotenv').config({path: '.env'})
 
 const cors=require("cors");
 const corsOptions ={
@@ -14,6 +15,7 @@ const authRoute = require("./routes/auth");
 const authRoute2 = require("./routes/auth2");
 const express = require('express')
 const app = express()
+
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
 
@@ -36,4 +38,4 @@ app.use('/students', studentsRouter)
 
 
 
-app.listen(4000, ()=> console.log('Server Started')) 
+app.listen(PORT , ()=> console.log('Server Started')) 
