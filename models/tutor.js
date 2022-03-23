@@ -9,6 +9,10 @@ username: {
     type: String,
     required: true
 },
+isAdmin: {
+    type: Boolean,
+    default: false
+},
 subject: {
     type: String,
     required: false
