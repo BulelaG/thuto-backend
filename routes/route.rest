@@ -14,9 +14,13 @@ POST http://localhost:4000/auth/register-tutor
 Content-Type: application/json
 
 {
-  "fullname": "Langa Manzi",
-  "username": "LangaM",
-  "password": "123"
+  "fullname": "Lana Mzi",
+  "username": "LanaM",
+  "grades": "12",
+    "subject": "maths",
+      "location": "Langa"
+
+
 }
 
 ### Login- tutor

@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken')
 
 //REGISTER
 router.post("/register-tutor", async (req, res) => {
-    const newTutor = new Tutor({
+    let tut = {
         fullname: req.body.fullname,
         username: req.body.username,
         email: req.body.email,
@@ -21,12 +21,16 @@ router.post("/register-tutor", async (req, res) => {
         req.body.password,
         process.env.PASS_SEC
       ).toString(),
-    });
+    }
+
+    console.log(tut)
+    const newTutor = new Tutor(tut);
   
     try {
       const savedTutor = await newTutor.save();
       res.status(201).json(savedTutor);
     } catch (err) {
+        console.log(err)
       res.status(500).json(err);
     }
   });
