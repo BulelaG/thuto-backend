@@ -8,8 +8,15 @@ const jwt = require('jsonwebtoken')
 //REGISTER
 router.post("/register-tutor", async (req, res) => {
     const newTutor = new Tutor({
-      fullname: req.body.fullname,
-      username: req.body.username,
+        fullname: req.body.fullname,
+        username: req.body.username,
+        email: req.body.email,
+       contact: req.body.contact,
+        subject: req.body.subject,
+        grades: req.body.grades,
+        img: req.body.img,
+        location: req.body.location,
+        document: req.body.document,
       password: CryptoJS.AES.encrypt(
         req.body.password,
         process.env.PASS_SEC

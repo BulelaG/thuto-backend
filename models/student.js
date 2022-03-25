@@ -11,7 +11,7 @@ const studentSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    required: false,
+    required: true,
   },
   password: {
     type: String,
@@ -23,19 +23,23 @@ const studentSchema = new mongoose.Schema({
   },
   contact: {
     type: String,
-    required: false,
+    required: true,
   },
   subject: {
     type: String,
-    required: false,
+    required: true,
   },
   grade: {
     type: String,
-    required: false,
+    required: true,
+  },
+   location: {
+    type: String,
+    required: true,
   },
   location: {
     type: String,
-    required: false,
+    required: true,
   },
 
   // ToPlatform: {

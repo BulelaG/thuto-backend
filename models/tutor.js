@@ -15,7 +15,7 @@ isAdmin: {
 },
 subject: {
     type: String,
-    required: false
+    required: true
 },
 password: {
     type: String,
@@ -23,7 +23,11 @@ password: {
 },
 location: {
     type: String,
-    required:false 
+    required:true 
+},
+email: {
+    type: String,
+    required:false  
 },
 img: {
     type: String,
@@ -31,7 +35,7 @@ img: {
 },
 grades: {
     type: String,
-    required:false  
+    required:true  
 },
 document: {
     type: String,
