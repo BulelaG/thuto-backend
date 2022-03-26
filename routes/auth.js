@@ -46,7 +46,7 @@ router.post("/register-tutor", async (req, res) => {
                   username: req.body.username
               }
           );
-  
+              
           !tutor && res.status(401).json("Wrong User Name");
           console.log(tutor)
           const hashedPassword = CryptoJS.AES.decrypt(

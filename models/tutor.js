@@ -11,7 +11,8 @@ password: {
 },
 username: {
     type: String,
-    required: true
+    required: true,
+    unique: true
 },
 isAdmin: {
     type: Boolean,
